@@ -62,7 +62,7 @@ String get previewResult {
     Parser p = Parser();
     Expression exp = p.parse(finalExpression);
     ContextModel cm = ContextModel();
-    // 👇 áp dụng DEG/RAD
+    //  áp dụng DEG/RAD
 double eval = exp.evaluate(EvaluationType.REAL, cm);
 
     if (eval.isInfinite || eval.isNaN) return 'Error';
@@ -157,7 +157,7 @@ double eval = exp.evaluate(EvaluationType.REAL, cm);
               finalExpression.substring(0, finalExpression.length - 1);
         }
 
-        // ✅ FIX QUAN TRỌNG: nếu chỉ có "(" hoặc rỗng
+        //  FIX QUAN TRỌNG: nếu chỉ có "(" hoặc rỗng
         if (finalExpression.trim().isEmpty || finalExpression == "()") {
           _result = "0";
           return;
@@ -248,20 +248,20 @@ double eval = exp.evaluate(EvaluationType.REAL, cm);
     String cleaned = input;
     cleaned = cleaned.replaceAll('×', '*');
     cleaned = cleaned.replaceAll('÷', '/');
-    // 👇 fix nhân ngầm: 2pi → 2*pi
-    // 👇 nhân ngầm: 2cos(30), 3sin(45)
+    //  fix nhân ngầm: 2pi → 2*pi
+    //  nhân ngầm: 2cos(30), 3sin(45)
     cleaned = cleaned.replaceAllMapped(
       RegExp(r'(\d)(sin|cos|tan|log|ln|sqrt)\('),
       (m) => '${m[1]}*${m[2]}(',
     );
 
-    // 👇 nhân ngầm: )(
+    //  nhân ngầm: )(
     cleaned = cleaned.replaceAllMapped(
       RegExp(r'\)\('),
       (m) => ')*(',
     );
 
-    // 👇 nhân ngầm: )2
+    //  nhân ngầm: )2
     cleaned = cleaned.replaceAllMapped(
       RegExp(r'\)(\d)'),
       (m) => ')*${m[1]}',
@@ -284,7 +284,7 @@ double eval = exp.evaluate(EvaluationType.REAL, cm);
     );
     cleaned = cleaned.replaceAll('π', math.pi.toString());
     cleaned = cleaned.replaceAll('e', math.e.toString());
-    // 👇 fix nhân ngầm: 2pi → 2*pi
+    //  fix nhân ngầm: 2pi → 2*pi
     // 2π hoặc 2e
 
     cleaned = cleaned.replaceAll('√', 'sqrt'); 
