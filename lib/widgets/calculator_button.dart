@@ -5,6 +5,7 @@ class CalculatorButton extends StatelessWidget {
   final Color bgColor;
   final Color textColor;
   final VoidCallback onTap;
+  final VoidCallback? onLongPress;
   final int flex; // For buttons that need to span multiple columns
 
   const CalculatorButton({
@@ -14,6 +15,7 @@ class CalculatorButton extends StatelessWidget {
     required this.onTap,
     this.textColor = Colors.white,
     this.flex = 1,
+    this.onLongPress,
   });
 
   @override
@@ -27,6 +29,7 @@ class CalculatorButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           child: InkWell(
             onTap: onTap,
+            onLongPress: onLongPress,
             borderRadius: BorderRadius.circular(16),
             child: Container(
               height: double.infinity,
@@ -35,7 +38,7 @@ class CalculatorButton extends StatelessWidget {
                 text,
                 style: TextStyle(
                   color: textColor,
-                  fontSize: 28,
+                  fontSize: text.length > 2 ? 20 : 28, // 👈 giảm size cho AND, XOR
                   fontWeight: FontWeight.w400,
                 ),
               ),

@@ -57,7 +57,60 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
           // --- PHẦN 2: TÍNH TOÁN ---
           _buildSectionHeader("Tính toán"),
+          
+          Consumer<CalculatorProvider>(
+            builder: (context, provider, child) {
+              return Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                decoration: BoxDecoration(
+                  color: AppColors.darkSecondary,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.straighten, color: Colors.white70),
+                      title: const Text(
+                        "Chế độ góc",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      subtitle: Text(
+                        provider.angleMode == AngleMode.degrees ? "Degrees (DEG)" : "Radians (RAD)",
+                        style: const TextStyle(color: Colors.grey, fontSize: 12),
+                      ),
+                    ),
 
+                    Row(
+                      children: [
+                        Expanded(
+                          child: RadioListTile<AngleMode>(
+                            title: const Text("DEG", style: TextStyle(color: Colors.white)),
+                            value: AngleMode.degrees,
+                            groupValue: provider.angleMode,
+                            activeColor: AppColors.lightAccent,
+                            onChanged: (value) {
+                              provider.setAngleMode(value!);
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          child: RadioListTile<AngleMode>(
+                            title: const Text("RAD", style: TextStyle(color: Colors.white)),
+                            value: AngleMode.radians,
+                            groupValue: provider.angleMode,
+                            activeColor: AppColors.lightAccent,
+                            onChanged: (value) {
+                              provider.setAngleMode(value!);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
           // Slider độ chính xác
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -274,4 +327,5 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
     );
   }
+  
 }

@@ -62,14 +62,12 @@ void main() {
     });
 
     test('Tự động đóng ngoặc khi thiếu', () {
-      // Input: sin(0
-      // Logic autocorrect: sin(0)
-      provider.addToExpression('sin(');
-      provider.addToExpression('0');
-      
+      final provider = CalculatorProvider();
+
+      provider.addToExpression('(2+3');
       provider.calculate();
-      
-      expect(provider.result, '0');
+
+      expect(provider.result, '5');
     });
   });
 

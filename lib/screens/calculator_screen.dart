@@ -9,7 +9,7 @@ import '../widgets/basic_keypad.dart';
 import '../widgets/programmer_keypad.dart';
 import '../widgets/scientific_keypad.dart';
 import '../widgets/mode_selector.dart';
-import '../widgets/right_navigation.dart';
+import '../widgets/top_action_bar.dart';
 // Import Theme and Colors
 import '../utils/constants.dart';
 
@@ -64,28 +64,42 @@ class CalculatorScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text(
-                          provider.expression.isEmpty
-                              ? ""
-                              : provider.expression,
-                          style: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 24,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+
+                        // HISTORY
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: provider.history.take(2).map((item) {
+                            return GestureDetector(
+                              onTap: () {
+                                context.read<CalculatorProvider>()
+                                    .useHistory(item.expression);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 4),
+                                child: Text(
+                                  "${item.expression} = ${item.result}",
+                                  style: TextStyle(
+                                    color: Colors.grey.withOpacity(0.6),
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
                         ),
-                        const SizedBox(height: 10),
+
+                        const SizedBox(height: 8),
+
+                        Text(
+                          provider.expression,
+                          style: const TextStyle(fontSize: 24),
+                        ),
+
                         FittedBox(
                           alignment: Alignment.centerRight,
-                          fit: BoxFit.scaleDown,
                           child: Text(
-                            provider.result,
-                            style: const TextStyle(
-                              color: AppColors.textWhite,
-                              fontSize: 60,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            provider.previewResult,
+                            style: const TextStyle(fontSize: 48),
                           ),
                         ),
                       ],

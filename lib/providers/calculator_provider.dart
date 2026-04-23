@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'dart:math' as math;
 import '../models/calculator_mode.dart';
 import '../models/calculation_history.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 enum AngleMode { degrees, radians }
 
@@ -11,7 +13,8 @@ class CalculatorProvider extends ChangeNotifier {
   String _expression = '';
   String _result = '0';
   CalculatorMode _mode = CalculatorMode.basic;
-  final AngleMode _angleMode = AngleMode.degrees;
+  AngleMode _angleMode = AngleMode.degrees;
+  AngleMode get angleMode => _angleMode;  
   final List<CalculationHistory> _history = [];
   double _memory = 0.0;
 
@@ -19,9 +22,73 @@ class CalculatorProvider extends ChangeNotifier {
   String get expression => _expression;
   String get result => _result;
   CalculatorMode get mode => _mode;
-  AngleMode get angleMode => _angleMode;
+  // AngleMode get angleMode => _angleMode;
   List<CalculationHistory> get history => _history;
 
+String get previewResult {
+  if (_expression.isEmpty) return '0';
+
+  if (_mode == CalculatorMode.programmer) {
+    // Mode programmer khó preview full → giữ result cũ
+    return _result;
+  }
+
+  String _applyAngleMode(String expr) {
+  if (_angleMode == AngleMode.radians) return expr;
+
+  return expr
+      .replaceAllMapped(RegExp(r'sin\(([^()]+)\)'), (m) =>
+          'sin((${m[1]}) * ${math.pi}/180)')
+      .replaceAllMapped(RegExp(r'cos\(([^()]+)\)'), (m) =>
+          'cos((${m[1]}) * ${math.pi}/180)')
+      .replaceAllMapped(RegExp(r'tan\(([^()]+)\)'), (m) =>
+          'tan((${m[1]}) * ${math.pi}/180)');
+}
+
+  try {
+    String finalExpression = _cleanExpression(_expression);
+    finalExpression = _autoCloseParentheses(finalExpression);
+    finalExpression = _applyAngleMode(finalExpression);
+
+    // Nếu kết thúc bằng toán tử → bỏ đi
+    if (finalExpression.isNotEmpty &&
+        _isOperator(finalExpression.characters.last)) {
+      finalExpression =
+          finalExpression.substring(0, finalExpression.length - 1);
+    }
+
+    if (finalExpression.isEmpty) return '0';
+
+    Parser p = Parser();
+    Expression exp = p.parse(finalExpression);
+    ContextModel cm = ContextModel();
+    // 👇 áp dụng DEG/RAD
+double eval = exp.evaluate(EvaluationType.REAL, cm);
+
+    if (eval.isInfinite || eval.isNaN) return 'Error';
+
+    return NumberFormat("#.##########", "en_US").format(eval);
+  } catch (e) {
+    return _result; // fallback nếu đang nhập dang dở
+  }
+}
+
+  Future<void> saveAngleMode() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('angleMode', _angleMode.toString());
+  }
+
+  void setAngleMode(AngleMode mode) {
+    _angleMode = mode;
+    saveAngleMode(); // lưu lại
+    notifyListeners();
+  }
+
+  void useHistory(String expr) {
+    _expression = expr;
+    calculate();
+    notifyListeners();
+  }
   // --- INPUT HANDLING ---
   void addToExpression(String value) {
     if (_mode == CalculatorMode.programmer) {
@@ -76,32 +143,54 @@ class CalculatorProvider extends ChangeNotifier {
 
   // --- LOGIC SCIENTIFIC (Using Library) ---
 
-  void _calculateScientific() {
-    try {
-      String finalExpression = _cleanExpression(_expression);
-      finalExpression = _autoCloseParentheses(finalExpression);
-      
-      // Delete the last operator if exists
-      if (_isOperator(finalExpression.characters.last)) {
-        finalExpression = finalExpression.substring(0, finalExpression.length - 1);
-      }
+    void _calculateScientific() {
+      try {
+        String finalExpression = _cleanExpression(_expression);
 
-      Parser p = Parser();
-      Expression exp = p.parse(finalExpression);
-      ContextModel cm = ContextModel();
-      double eval = exp.evaluate(EvaluationType.REAL, cm);
+        // ✅ auto đóng ngoặc
+        finalExpression = _autoCloseParentheses(finalExpression);
 
-      if (eval.isInfinite || eval.isNaN) {
+        // ✅ nếu kết thúc bằng toán tử → bỏ
+        if (finalExpression.isNotEmpty &&
+            _isOperator(finalExpression.characters.last)) {
+          finalExpression =
+              finalExpression.substring(0, finalExpression.length - 1);
+        }
+
+        // ✅ FIX QUAN TRỌNG: nếu chỉ có "(" hoặc rỗng
+        if (finalExpression.trim().isEmpty || finalExpression == "()") {
+          _result = "0";
+          return;
+        }
+
+        Parser p = Parser();
+        Expression exp = p.parse(finalExpression);
+        ContextModel cm = ContextModel();
+
+        double eval = exp.evaluate(EvaluationType.REAL, cm);
+
+        if (eval.isInfinite || eval.isNaN) {
+          _result = "Error";
+        } else {
+          _result = NumberFormat("#.##########", "en_US").format(eval);
+          _addToHistory(_expression, _result);
+        }
+      } catch (e) {
+        debugPrint("Sci Error: $e");
         _result = "Error";
-      } else {
-        _result = NumberFormat("#.##########", "en_US").format(eval);
-        _addToHistory(_expression, _result);
       }
-    } catch (e) {
-      debugPrint("Sci Error: $e");
-      _result = "Error"; 
     }
-  }
+    String _applyAngleMode(String expr) {
+  if (_angleMode == AngleMode.radians) return expr;
+
+  return expr
+      .replaceAllMapped(RegExp(r'sin\(([^()]+)\)'), (m) =>
+          'sin((${m[1]}) * ${math.pi}/180)')
+      .replaceAllMapped(RegExp(r'cos\(([^()]+)\)'), (m) =>
+          'cos((${m[1]}) * ${math.pi}/180)')
+      .replaceAllMapped(RegExp(r'tan\(([^()]+)\)'), (m) =>
+          'tan((${m[1]}) * ${math.pi}/180)');
+}
 
   // --- LOGIC PROGRAMMER (Manual) ---
 
@@ -159,10 +248,49 @@ class CalculatorProvider extends ChangeNotifier {
     String cleaned = input;
     cleaned = cleaned.replaceAll('×', '*');
     cleaned = cleaned.replaceAll('÷', '/');
+    // 👇 fix nhân ngầm: 2pi → 2*pi
+    // 👇 nhân ngầm: 2cos(30), 3sin(45)
+    cleaned = cleaned.replaceAllMapped(
+      RegExp(r'(\d)(sin|cos|tan|log|ln|sqrt)\('),
+      (m) => '${m[1]}*${m[2]}(',
+    );
+
+    // 👇 nhân ngầm: )(
+    cleaned = cleaned.replaceAllMapped(
+      RegExp(r'\)\('),
+      (m) => ')*(',
+    );
+
+    // 👇 nhân ngầm: )2
+    cleaned = cleaned.replaceAllMapped(
+      RegExp(r'\)(\d)'),
+      (m) => ')*${m[1]}',
+    );
+    cleaned = cleaned.replaceAllMapped(
+    RegExp(r'(\d)(π|e)'),
+    (m) => '${m[1]}*${m[2]}',
+    );
+
+    // π2 hoặc e2
+    cleaned = cleaned.replaceAllMapped(
+      RegExp(r'(π|e)(\d)'),
+      (m) => '${m[1]}*${m[2]}',
+    );
+
+    // 2(3+4)
+    cleaned = cleaned.replaceAllMapped(
+      RegExp(r'(\d)\('),
+      (m) => '${m[1]}*(',
+    );
     cleaned = cleaned.replaceAll('π', math.pi.toString());
     cleaned = cleaned.replaceAll('e', math.e.toString());
+    // 👇 fix nhân ngầm: 2pi → 2*pi
+    // 2π hoặc 2e
+
     cleaned = cleaned.replaceAll('√', 'sqrt'); 
     cleaned = cleaned.replaceAll('%', '/100');
+
+    
     return cleaned;
   }
 

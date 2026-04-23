@@ -113,6 +113,12 @@ class ScientificKeypad extends StatelessWidget {
                 default: provider.addToExpression(label); break;
               }
             },
+            onLongPress: () {
+              if (label == 'C') {
+                Provider.of<HistoryProvider>(context, listen: false)
+                    .clearHistory();
+              }
+            },
           );
         }),
       ),

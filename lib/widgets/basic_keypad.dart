@@ -70,6 +70,12 @@ class BasicKeypad extends StatelessWidget {
                   break;
               }
             },
+            onLongPress: () {
+              if (label == 'C') {
+                Provider.of<HistoryProvider>(context, listen: false)
+                    .clearHistory();
+              }
+            },
           );
         }),
       ),
