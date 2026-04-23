@@ -1,6 +1,6 @@
-# 📱 Ứng dụng Máy Tính Nâng Cao (Flutter Advanced Calculator)
+#  Ứng dụng Máy Tính Nâng Cao (Flutter Advanced Calculator)
 
-## 📌 Mô tả dự án
+##  Mô tả dự án
 
 Đây là ứng dụng máy tính đa chế độ được xây dựng bằng Flutter. Ứng dụng hỗ trợ các phép tính cơ bản, khoa học và lập trình với giao diện hiện đại và khả năng hiển thị kết quả theo thời gian thực.
 
@@ -8,14 +8,14 @@
 
 ---
 
-## 🚀 Tính năng chính
+##  Tính năng chính
 
-### 🔢 Chế độ cơ bản (Basic)
+###  Chế độ cơ bản (Basic)
 
 * Cộng, trừ, nhân, chia
 * Hiển thị kết quả ngay khi nhập (preview)
 
-### 🧠 Chế độ khoa học (Scientific)
+###  Chế độ khoa học (Scientific)
 
 * Các hàm: sin, cos, tan, log, ln, sqrt
 * Hằng số: π, e
@@ -23,23 +23,23 @@
 * Chuyển đổi góc: DEG / RAD
 * Tự động đóng ngoặc
 
-### 💻 Chế độ lập trình (Programmer)
+###  Chế độ lập trình (Programmer)
 
 * Hỗ trợ số hệ HEX
 * Phép toán bit: AND, OR, XOR, <<, >>
 
-### 📜 Lịch sử
+###  Lịch sử
 
 * Lưu các phép tính gần đây
 * Nhấn để sử dụng lại phép tính
 
-### 💾 Bộ nhớ
+###  Bộ nhớ
 
 * MC, MR, M+, M-
 
 ---
 
-## 📸 Ảnh minh họa / GIF
+##  Ảnh minh họa / GIF
 
 ### Basic Mode
 
@@ -57,7 +57,7 @@
 
 ### Demo
 
-![Demo]()
+![Demo](https://github.com/TruongHuy9/flutter_advanced_calculator_letruongtruonghuy/tree/main/screenshots)
 
 ---
 
