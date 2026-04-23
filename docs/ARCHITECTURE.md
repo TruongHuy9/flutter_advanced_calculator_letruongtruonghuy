@@ -1,10 +1,10 @@
-# 🏗 Kiến trúc hệ thống
+#  Kiến trúc hệ thống
 
-## 📌 Mô hình kiến trúc
+##  Mô hình kiến trúc
 
 Ứng dụng sử dụng kiến trúc phân tầng kết hợp với Provider để quản lý trạng thái.
 
-## 📊 Sơ đồ tổng quan
+##  Sơ đồ tổng quan
 
 ```
 UI (Giao diện)
@@ -18,27 +18,27 @@ Dữ liệu (History, Settings)
 
 ---
 
-## 📦 Các thành phần
+##  Các thành phần
 
-### 🖥 UI Layer
+###  UI Layer
 
 * CalculatorScreen
 * Các keypad (Basic, Scientific, Programmer)
 * Settings Screen
 
-### ⚙️ Provider Layer
+###  Provider Layer
 
 * CalculatorProvider
 * HistoryProvider
 * ThemeProvider
 
-### 🧠 Logic Layer
+###  Logic Layer
 
 * Xử lý biểu thức (math_expressions)
 * Phép toán bit (programmer mode)
 * Bộ nhớ (memory)
 
-### 💾 Data Layer
+###  Data Layer
 
 * SharedPreferences (lưu setting)
 * Danh sách lịch sử
