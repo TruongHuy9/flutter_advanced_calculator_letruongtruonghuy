@@ -57,8 +57,7 @@
 
 ### Demo
 
-[https://github.com/TruongHuy9/flutter_advanced_calculator_letruongtruonghuy/tree/main/screenshots
-](https://github.com/TruongHuy9/flutter_advanced_calculator_letruongtruonghuy/tree/main/screenshots)
+flutter_advanced_calculator_letruongtruonghuy/screenshots at main · TruongHuy9/flutter_advanced_calculator_letruongtruonghuy
 ---
 
 ## Sơ đồ kiến trúc
