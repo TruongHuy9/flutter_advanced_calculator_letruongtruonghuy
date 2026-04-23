@@ -38,7 +38,7 @@ class CalculatorButton extends StatelessWidget {
                 text,
                 style: TextStyle(
                   color: textColor,
-                  fontSize: text.length > 2 ? 20 : 28, // 👈 giảm size cho AND, XOR
+                  fontSize: text.length > 2 ? 20 : 28, //  giảm size cho AND, XOR
                   fontWeight: FontWeight.w400,
                 ),
               ),
