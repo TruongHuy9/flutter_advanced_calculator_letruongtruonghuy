@@ -43,18 +43,17 @@
 
 ### Basic Mode
 
-![Basic](<img width="409" height="832" alt="Screenshot 2026-04-23 214357" src="https://github.com/user-attachments/assets/46ee7d92-577d-4a19-8ae0-a009911da8bf" />
-)
 <img width="409" height="832" alt="Screenshot 2026-04-23 214357" src="https://github.com/user-attachments/assets/5da621e3-3795-4202-80e1-eaa3bc1e55f8" />
 
 ### Scientific Mode
 
-![Scientific](<img width="401" height="839" alt="Screenshot 2026-04-23 214510" src="https://github.com/user-attachments/assets/5bd57594-fa58-417d-9a1f-e48d0525104c" />
-)
+<img width="401" height="839" alt="Screenshot 2026-04-23 214510" src="https://github.com/user-attachments/assets/5bd57594-fa58-417d-9a1f-e48d0525104c" />
+
 
 ### Programmer Mode
 
-![Programmer]()
+<img width="406" height="834" alt="Screenshot 2026-04-23 214525" src="https://github.com/user-attachments/assets/80b763f1-ea27-422f-8335-debbb1afd16a" />
+
 
 ### Demo
 
