@@ -45,6 +45,7 @@
 
 ![Basic](<img width="409" height="832" alt="Screenshot 2026-04-23 214357" src="https://github.com/user-attachments/assets/46ee7d92-577d-4a19-8ae0-a009911da8bf" />
 )
+<img width="409" height="832" alt="Screenshot 2026-04-23 214357" src="https://github.com/user-attachments/assets/5da621e3-3795-4202-80e1-eaa3bc1e55f8" />
 
 ### Scientific Mode
 
@@ -98,7 +99,7 @@ Chi tiết test xem tại: `docs/TESTING.md`
 
 ---
 
-## 🔮 Hướng phát triển (Future Improvements)
+##  Hướng phát triển (Future Improvements)
 
 * Cải thiện parser xử lý biểu thức
 * Hỗ trợ hoàn chỉnh nhân ngầm
